@@ -101,7 +101,7 @@ def eval(args, valid_set, model, poolsize, K):
 
     data_loader = torch.utils.data.DataLoader(dataset=valid_set,
                                               batch_size=poolsize,
-                                              shuffle=True, drop_last=True,
+                                              shuffle=True, drop_last=False,
                                               num_workers=1)
     accs, mrrs, maps, ndcgs = [], [], [], []
     all_nl_emb = []

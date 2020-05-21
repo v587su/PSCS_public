@@ -5,3 +5,6 @@ __pycache__/
 *.pyc
 *.csv
 *.txt
+data/path_files
+data/path_data
+data/processed

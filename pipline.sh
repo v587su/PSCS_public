@@ -3,11 +3,11 @@
 #k=100000
 total=15
 k=5
-ii=$(((total - total%k)/k))
+ii=$(((total - total%k)/k+1))
 a= rm -rf data/path_files
 a= mkdir data/path_files
 a= python scripts/nl_extract.py --k $k
-
+#
 for ((i=0; i<=$ii; i++))
 do
     a= java -jar cli-0.3.jar pathContexts --lang java --project data/path_files/train_$((k*i)) --output data/path_data/train_$i

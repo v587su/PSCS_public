@@ -192,10 +192,9 @@ def validate(args, valid_set, model, poolsize, K):
     model.eval()
 
     device = next(model.parameters()).device
-    poolsize = min(len(valid_set), poolsize)
     data_loader = torch.utils.data.DataLoader(dataset=valid_set,
                                               batch_size=poolsize,
-                                              shuffle=True, drop_last=False,
+                                              shuffle=True, drop_last=True,
                                               num_workers=1)
     accs, mrrs, maps, ndcgs = [], [], [], []
     for data in tqdm.tqdm(data_loader):
