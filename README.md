@@ -35,7 +35,7 @@ sudo bash pipeline.sh
 
 To evaluate the performance of a trained model:
 
-Run the 'test.py' file:
+Run the `test.py` file:
 
 ```
 python test.py --test_epoch 100
