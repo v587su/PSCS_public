@@ -2,7 +2,7 @@
 
 This repository contains source code necessary to reproduce the model in the paper:
 
-PSCS: A Path-based Neural Model for SemanticCode Search
+"PSCS: A Path-based Neural Model for SemanticCode Search"
 
 ## Usage
 
@@ -18,7 +18,7 @@ We use the [CodeSearchNet](https://github.com/github/CodeSearchNet) as our datas
 
 Download the Java dataset following the instruction of [CodeSearchNet](https://github.com/github/CodeSearchNet), and move it to the directory `./data/`.
 
-The data exists in `./data` is the examples.
+The data exists in `./data` is the example data.
 
 ### Data processing and Model training
 
@@ -33,10 +33,10 @@ sudo bash pipeline.sh
 
 ### Evaluation
 
-To evaluate the model performance:
+To evaluate the performance of a trained model:
 
 Run the 'test.py' file:
 
 ```
-python test.py
+python test.py --test_epoch 100
 ```

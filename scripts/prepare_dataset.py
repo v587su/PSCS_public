@@ -9,10 +9,9 @@ if __name__ == '__main__':
     parser.add_argument("-d", "--dir_path", required=True, type=str)
     parser.add_argument("-o", "--output_dir_path", required=True, type=str)
     parser.add_argument("-s", "--vocab_size", type=int, default=None)
-    parser.add_argument("-e", "--encoding", type=str, default="utf-8")
     parser.add_argument("-m", "--min_freq", type=int, default=1)
-    parser.add_argument("-l", "--max_path", type=int, default=50)
     args = parser.parse_args()
+
     node_path = os.path.join(args.dir_path, 'node_types.csv')
     corpus_path = os.path.join(args.dir_path, 'paths.csv')
     contexts_path = os.path.join(args.dir_path, 'path_contexts.csv')

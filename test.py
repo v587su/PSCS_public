@@ -11,7 +11,7 @@ from dataset import SiamessDataset, WordVocab
 
 
 def test(args):
-    model_save_dir = '{}/storage/exp9/main.model.ep{}'.format(args.save_dir, str(args.test_epoch))
+    model_save_dir = '{}/main_model/main.model.ep{}'.format(args.save_dir, str(args.test_epoch))
 
     f = open('{}/processed/nl_vocab.pickle'.format(args.data_dir), 'rb')
     nl_vocab = pickle.load(f)
