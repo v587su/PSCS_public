@@ -11,11 +11,13 @@ class PSCSNetwork(nn.Module):
         super(PSCSNetwork, self).__init__()
         self.config = config
         self.nl_emb = nn.Embedding(nl_vocab_len, config.emb_size,
-                                       padding_idx=0)
+                                   padding_idx=0, max_norm=config.max_norm)
         self.path_emb = nn.Embedding(path_vocab_len, config.emb_size,
-                                     padding_idx=0)
+                                     padding_idx=0, max_norm=config.max_norm)
         self.linear = nn.Linear(config.emb_size * 4, config.emb_size)
         self.path_lstm = nn.LSTM(config.emb_size, config.emb_size,
+                                 num_layers=config.num_layers,
+                                 dropout=config.rnn_dropout,
                                  batch_first=True, bidirectional=True)
         self.W_a = nn.Parameter(
             torch.rand((config.emb_size * 4, config.emb_size * 4),
@@ -24,6 +26,7 @@ class PSCSNetwork(nn.Module):
         self.W_b = nn.Parameter(torch.rand((config.emb_size, config.emb_size),
                                            dtype=torch.float,
                                            device=device, requires_grad=True))
+        self.dropout = nn.Dropout(config.dropout)
         self.init_weights()
 
     def init_weights(self):
@@ -56,10 +59,13 @@ class PSCSNetwork(nn.Module):
         path_emb = self.path_emb(
             path.view(-1, self.config.path_len))
         _, (hidden, c_n) = self.path_lstm(path_emb)
+        hidden = hidden[-2:, :, :]
+
         hidden = hidden.permute((1, 0, 2)).contiguous().view(
             batch_size * self.config.k, 1, -1)
         path_vec = hidden.squeeze(1)
         code_emb = torch.cat((start_token_emb, end_token_emb, path_vec), 1)
+        code_emb = self.dropout(code_emb)
 
         nl_vec = self.get_nl_vec(nl_emb)
         code_vec = self.get_code_vec(code_emb)

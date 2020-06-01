@@ -12,6 +12,7 @@ from torch.optim import Adam
 from model import *
 from dataset import SiamessDataset, WordVocab
 from torch.utils.data import DataLoader
+from torch.nn.utils import clip_grad_norm
 
 seed = 231
 random.seed(seed)
@@ -58,6 +59,9 @@ def train(args):
     optim = Adam(model.parameters(), lr=args.lr,
                  betas=[args.adam_beta1, args.adam_beta2],
                  weight_decay=args.adam_weight_decay)
+    scheduler = torch.optim.lr_scheduler.LambdaLR(optim, lr_lambda=lambda
+        epoch: args.decay_ratio ** epoch)
+
     use_parallel = False
     if cuda_condition:
         if torch.cuda.device_count() > 1:
@@ -103,6 +107,8 @@ def train(args):
             loss_value = loss(nl_vec, trg_nl_vec, code_vec, trg_code_vec)
             optim.zero_grad()
             loss_value.backward()
+            if args.clip_grad_norm is not None:
+                clip_grad_norm(model.parameters(), args.clip_grad_norm)
             optim.step()
             avg_loss += float(loss_value.item())
 
@@ -124,9 +130,15 @@ def train(args):
                     "map": map,
                     "ndcg": ndcg
                 }
-
                 data_iter.write(str(post_fix))
+                if not os.path.exists(args.save_dir):
+                    os.mkdir(args.save_dir)
+                f = open('{}/performance.txt'.format(args.save_dir), 'a')
+                post_fix['epoch'] = epoch
+                f.write(str(post_fix) + '\n')
+                f.close()
 
+        scheduler.step()
         model_save_dir = '{}/main_model'.format(args.save_dir)
         if not os.path.exists(model_save_dir):
             os.makedirs(model_save_dir)
@@ -239,6 +251,9 @@ def args_parser():
                         help="maximum sequence len of natural language")
     parser.add_argument("-pl", "--path_len", type=int, default=12)
     parser.add_argument("-es", "--emb_size", type=int, default=128)
+    parser.add_argument("--num_layers", type=int, default=1)
+    parser.add_argument("-dp", "--dropout", type=float, default=0.25)
+    parser.add_argument("-rdp", "--rnn_dropout", type=float, default=0.5)
     parser.add_argument("-m", "--margin", type=float, default=1,
                         help="margin")
     parser.add_argument("--pool_size", type=int, default=1000)
@@ -261,6 +276,11 @@ def args_parser():
                         help="the epoch of trained model to test")
 
     parser.add_argument("--lr", type=float, default=1e-4,
+                        help="learning rate of adam")
+    parser.add_argument("--decay_ratio", type=float, default=0.95)
+    parser.add_argument("--max_norm", type=float, default=1.0,
+                        help="learning rate of adam")
+    parser.add_argument("--clip_grad_norm", type=float, default=None,
                         help="learning rate of adam")
     parser.add_argument("--adam_weight_decay", type=float, default=0,
                         help="weight_decay of adam")
