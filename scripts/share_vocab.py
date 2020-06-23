@@ -1,4 +1,3 @@
-# 后面token要切分，test不能直接unknown
 import os
 import pandas as pd
 import tqdm
@@ -113,7 +112,6 @@ if __name__ == '__main__':
     path_vocab_test = pd.read_csv(os.path.join(test_dir, 'paths.csv'))
     path_vocab_train = pd.read_csv(os.path.join(train_dir, 'paths.csv'))
 
-    # make path map
     method = 'outer' if need_merge else 'left'
     node_vocab_map = vocab_merge(node_vocab_test, node_vocab_train,
                                  on=['node_type'], method=method)
@@ -129,11 +127,9 @@ if __name__ == '__main__':
     path_vocab_map = vocab_merge(path_vocab_test, path_vocab_train,
                                  on=['path'],
                                  method='outer')
-    # print('node:', node_vocab_map)
-    # print('token:', token_vocab_map)
-    # print('path:', path_vocab_map)
+
     path_dict = map2dict(path_vocab_map)
-    # transform path_context
+
     path_context_test = []
     for root, dirs, files in os.walk(test_dir):
         for f_name in tqdm.tqdm(files):
@@ -180,4 +176,3 @@ if __name__ == '__main__':
                    columns=['path', 'id'])
         save_vocab(token_vocab_map, os.path.join(train_dir, 'tokens.csv'),
                    columns=['token', 'id'])
-        # node_type\paths\tokens 全用train的, path_contexts用test的

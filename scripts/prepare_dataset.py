@@ -34,7 +34,6 @@ if __name__ == '__main__':
     vocab.save_vocab(
         os.path.join(args.output_dir_path, 'path_vocab.pickle'))
 
-    # 用bert_vocab处理tokens里的subtoken
     f = open(os.path.join(args.output_dir_path, 'nl_vocab.pickle'), 'rb')
     nl_vocab = pickle.load(f)
     f.close()

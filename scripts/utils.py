@@ -9,8 +9,6 @@ from collections import Counter
 
 def read_jsonl_file(dir_path):
     dir_name = ['test', 'train', 'valid']
-    # dir_name = ['test']
-    # jsons = {'test': []}
     jsons = {'test': [], 'train': [], 'valid': []}
     for type in dir_name:
         files = os.listdir(os.path.join(dir_path, type))
@@ -25,7 +23,6 @@ def read_jsonl_file(dir_path):
             f.close()
 
     return jsons['test'], jsons['train'], jsons['valid']
-    # return jsons['test']
 
 
 def split_camel(camel_str,test=''):

@@ -47,9 +47,7 @@ def str_filter(docstring):
     if re.search(r'[\u4e00-\u9fa5@]', docstring) is not None:
         return ''
     docstring = docstring.replace('\n', ' ')
-    # remove words in (){}[]<>
     docstring = re.sub(r'\\(.*?\\)|\\{.*?}|\\[.*?]|\\<.*?>', '', docstring)
-    # remove special tokens
     docstring = docstring.replace('_', ' ')
     docstring = re.sub(r'[^a-zA-Z0-9 ]', '', docstring)
     docstring_tokens = split_camel(docstring)
