@@ -22,8 +22,9 @@ The data exists in `./data` is the example data.
 
 ### Data processing and Model training
 
-The whole process of our model, including data processing and model training, is in file `pipeline.sh`
-Before running, edit the file `pipeline.sh` using the instructions there.
+The whole process of our model, including data processing and model training, is in file `pipeline.sh`.
+
+Before running, edit the file `pipeline.sh` following the instructions below.
 
 Run the `pipeline.sh` file:
 
