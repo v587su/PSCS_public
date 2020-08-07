@@ -31,6 +31,7 @@ Run the `pipeline.sh` file:
 sudo bash pipeline.sh
 ```
 
+Note: the vocabularies for natural language of train set and test set are not shared. However, the vocabularies for path need to be shared to fit the production environment. For a code retrieval system, the code snippets to be searched are already known. So we don't need to worry about the information leakage problem.
 ### Evaluation
 
 To evaluate the performance of a trained model:
